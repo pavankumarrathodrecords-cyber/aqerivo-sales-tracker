@@ -217,7 +217,7 @@ $('signupBtn').addEventListener('click',async()=>{
 });
 $('logoutBtn').addEventListener('click',async()=>{const {error}=await supabase.auth.signOut();if(error){toast(error.message);return}showSignedOut()});
 $('todayLabel').textContent=new Date().toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'long',year:'numeric'});
-if(window.supabase?.createClient && SUPABASE_PUBLISHABLE_KEY!=='PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE'){
+if(window.supabase?.createClient && SUPABASE_PUBLISHABLE_KEY!=='sb_publishable_6zPFbFCySQ3EJ7oelJ_u6A_q_lnM0Fq'){
  supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
  supabase.auth.getSession().then(({data})=>{if(data.session)showSignedIn(data.session.user);else showSignedOut()});
  supabase.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_IN'&&session?.user)showSignedIn(session.user);if(event==='SIGNED_OUT')showSignedOut()});
