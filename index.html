@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f9fc">
+<meta name="description" content="AQERIVO Sales Tracker helps businesses organize leads, track deals and follow up on time.">
+<title>AQERIVO Sales Tracker | AQERIVO Technologies</title>
+<style>
+:root{--navy:#13233f;--blue:#2563eb;--blue2:#1d4ed8;--ink:#172033;--muted:#64748b;--line:#e5eaf2;--bg:#f5f7fb;--white:#fff;--green:#0f9f6e;--red:#dc4c64;--amber:#b7791f;--shadow:0 12px 32px rgba(20,38,70,.07)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.shell{max-width:1180px;margin:auto;padding:22px 18px 48px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px}.brand{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,#18345d,#3277f6);color:white;display:grid;place-items:center;font-weight:900;font-size:21px;box-shadow:0 7px 18px #2563eb33}.brand h1{font-size:18px;margin:0;color:var(--navy);letter-spacing:-.4px}.brand p{margin:1px 0 0;color:var(--muted);font-size:12px}.top-actions{display:flex;gap:9px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:white;color:var(--ink);padding:10px 14px;border-radius:10px;font-weight:650;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:7px}.btn:hover{border-color:#b8c8e2}.btn.primary{background:var(--blue);border-color:var(--blue);color:white}.btn.primary:hover{background:var(--blue2)}.btn.danger{color:var(--red)}.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:20px}.eyebrow{color:var(--blue);font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}.hero h2{font-size:clamp(25px,4vw,34px);letter-spacing:-1.2px;line-height:1.1;margin:7px 0}.hero p{margin:7px 0 0;color:var(--muted);max-width:600px}.date-chip{white-space:nowrap;background:#eaf1ff;color:#2454b7;border-radius:999px;padding:8px 12px;font-size:12px;font-weight:700}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:20px 0}.stat{background:white;border:1px solid var(--line);border-radius:15px;padding:17px;box-shadow:0 4px 14px rgba(20,38,70,.025)}.stat .label{color:var(--muted);font-size:12px;font-weight:650}.stat .value{font-size:25px;font-weight:800;letter-spacing:-.7px;margin-top:7px;color:var(--navy);overflow-wrap:anywhere}.stat .hint{font-size:11px;color:var(--muted);margin-top:3px}.layout{display:grid;grid-template-columns:340px 1fr;gap:16px;align-items:start}.panel{background:white;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}.panel-head{padding:17px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}.panel-head h3{margin:0;font-size:15px;color:var(--navy)}.panel-body{padding:18px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:5px}.field.full{grid-column:1/-1}.field label{font-size:11px;font-weight:750;color:#52617a}.field input,.field select,.field textarea,.search{width:100%;border:1px solid #dce3ed;border-radius:9px;padding:10px 11px;background:#fff;color:var(--ink);outline:none;min-width:0}.field input:focus,.field select:focus,.field textarea:focus,.search:focus{border-color:#7aa5ff;box-shadow:0 0 0 3px #2563eb16}.field textarea{min-height:74px;resize:vertical}.form-actions{display:flex;gap:8px;margin-top:15px}.form-actions .btn{flex:1}.hint-box{margin-top:15px;background:#f4f7fc;border:1px solid #e6edf7;border-radius:10px;padding:11px;color:#60708a;font-size:11px}.toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.search-wrap{flex:1;min-width:160px}.search{padding:10px 12px}.toolbar select{border:1px solid var(--line);border-radius:9px;padding:10px;background:#fff;color:var(--ink);font-size:12px}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:650px}th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.65px;color:#8290a5;background:#fbfcfe;padding:12px 14px;border-bottom:1px solid var(--line)}td{padding:13px 14px;border-bottom:1px solid #edf1f6;font-size:12px;vertical-align:middle}tr:last-child td{border-bottom:0}.customer{font-weight:750;color:var(--navy);font-size:13px}.sub{font-size:11px;color:var(--muted);margin-top:2px}.amount{font-weight:750;white-space:nowrap}.pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:800;white-space:nowrap}.pill.New{background:#eef2f7;color:#52617a}.pill.Contacted{background:#eaf1ff;color:#2454b7}.pill.Qualified{background:#fff4db;color:#96620c}.pill.Won{background:#e3f8ef;color:#08764e}.pill.Lost{background:#ffedf0;color:#b8324b}.row-actions{display:flex;gap:5px}.icon-btn{border:1px solid var(--line);background:white;border-radius:7px;padding:5px 7px;color:#52617a;font-size:11px}.empty{text-align:center;padding:40px 20px;color:var(--muted)}.empty strong{display:block;color:var(--navy);font-size:15px;margin-bottom:5px}.footer{margin-top:18px;color:#8995a8;font-size:11px;text-align:center}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#152640;color:white;padding:11px 16px;border-radius:10px;box-shadow:var(--shadow);font-size:13px;opacity:0;pointer-events:none;transition:.2s;z-index:10}.toast.show{opacity:1}.privacy{display:flex;gap:7px;align-items:flex-start;color:#718096;font-size:11px;margin-top:10px}.privacy b{color:#44536b}.modal-backdrop{position:fixed;inset:0;background:#0b173080;display:none;align-items:center;justify-content:center;padding:16px;z-index:20}.modal-backdrop.show{display:flex}.modal{background:white;border-radius:15px;max-width:420px;width:100%;padding:20px;box-shadow:0 20px 70px #07152a55}.modal h3{margin:0 0 8px}.modal p{color:var(--muted);font-size:13px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.hero{align-items:flex-start;flex-direction:column}.date-chip{white-space:normal}}
+@media(max-width:480px){.shell{padding:16px 12px 35px}.topbar{align-items:flex-start;flex-direction:column}.top-actions{width:100%}.top-actions .btn{flex:1}.stats{gap:8px}.stat{padding:13px}.stat .value{font-size:21px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.panel-body{padding:14px}.panel-head{padding:14px}}
+
+.auth-panel{max-width:560px;margin:34px auto 20px}.auth-intro{color:var(--muted);margin:0 0 16px}.auth-message{font-size:12px;color:var(--muted);margin:12px 0 0}.account-strip{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 13px;background:#eaf1ff;border:1px solid #d8e5ff;border-radius:12px;margin:0 0 18px;font-size:12px;color:#24477f}.account-strip[hidden],#appArea[hidden],.auth-panel[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand"><div class="logo">A</div><div><h1>AQERIVO TECHNOLOGIES</h1><p>Innovate. Build. Evolve.</p></div></div>
+    <div class="top-actions"><button class="btn" id="exportCsv">↓ Export CSV</button><button class="btn" id="backupBtn">⇩ Backup</button><button class="btn" id="restoreBtn">⇧ Restore</button><input type="file" id="restoreFile" accept="application/json" hidden></div>
+  </header>
+
+  <section class="panel auth-panel" id="authPanel">
+    <div class="panel-head"><h3>AQERIVO account</h3><span class="pill Contacted">CLOUD VERSION</span></div>
+    <div class="panel-body">
+      <p class="auth-intro">Sign in to securely access your sales leads across devices, or create a new account.</p>
+      <form id="authForm">
+        <div class="form-grid">
+          <div class="field full"><label for="authEmail">Email address</label><input id="authEmail" type="email" required autocomplete="email" placeholder="you@example.com"></div>
+          <div class="field full"><label for="authPassword">Password</label><input id="authPassword" type="password" required minlength="8" autocomplete="current-password" placeholder="At least 8 characters"></div>
+        </div>
+        <div class="form-actions"><button class="btn primary" type="submit" id="loginBtn">Sign in</button><button class="btn" type="button" id="signupBtn">Create account</button></div>
+      </form>
+      <p class="auth-message" id="authMessage" role="status" aria-live="polite">Email confirmation is enabled. New accounts may need to confirm their email before signing in.</p>
+    </div>
+  </section>
+  <div class="account-strip" id="accountStrip" hidden>
+    <span>Signed in as <strong id="signedInEmail"></strong></span>
+    <button class="btn" id="logoutBtn" type="button">Sign out</button>
+  </div>
+  <div id="appArea" hidden>
+  <section class="hero"><div><div class="eyebrow">Sales workspace</div><h2>Know your pipeline.<br>Close the next deal.</h2><p>Keep enquiries organized, track deal values and never lose sight of your next follow-up.</p></div><div class="date-chip" id="todayLabel"></div></section>
+  <section class="stats" aria-label="Sales summary">
+    <div class="stat"><div class="label">Total leads</div><div class="value" id="totalLeads">0</div><div class="hint">All enquiries recorded</div></div>
+    <div class="stat"><div class="label">Open pipeline</div><div class="value" id="pipelineValue">₹0</div><div class="hint">New, contacted and qualified</div></div>
+    <div class="stat"><div class="label">Won revenue</div><div class="value" id="wonRevenue">₹0</div><div class="hint">Deals marked as won</div></div>
+    <div class="stat"><div class="label">Win rate</div><div class="value" id="winRate">0%</div><div class="hint">Won ÷ closed deals</div></div>
+  </section>
+  <main class="layout">
+    <section class="panel">
+      <div class="panel-head"><h3 id="formTitle">Add a new lead</h3><span class="pill Contacted">QUICK ENTRY</span></div>
+      <div class="panel-body">
+        <form id="leadForm">
+          <input type="hidden" id="leadId">
+          <div class="form-grid">
+            <div class="field full"><label for="name">Customer / business name *</label><input id="name" required maxlength="80" placeholder="e.g. Bright Path Studio"></div>
+            <div class="field"><label for="email">Email</label><input id="email" type="email" maxlength="120" placeholder="name@example.com"></div>
+            <div class="field"><label for="phone">Phone / WhatsApp</label><input id="phone" maxlength="30" placeholder="Contact number"></div>
+            <div class="field"><label for="value">Deal value *</label><input id="value" type="number" min="0" step="0.01" required placeholder="0.00"></div>
+            <div class="field"><label for="currency">Currency</label><select id="currency"><option value="INR">INR ₹</option><option value="USD">USD $</option><option value="EUR">EUR €</option><option value="GBP">GBP £</option><option value="AED">AED</option></select></div>
+            <div class="field"><label for="stage">Lead status</label><select id="stage"><option>New</option><option>Contacted</option><option>Qualified</option><option>Won</option><option>Lost</option></select></div>
+            <div class="field"><label for="source">Lead source</label><select id="source"><option>Website</option><option>Instagram</option><option>WhatsApp</option><option>Referral</option><option>Email</option><option>Other</option></select></div>
+            <div class="field full"><label for="followup">Next follow-up date</label><input id="followup" type="date"></div>
+            <div class="field full"><label for="notes">Notes</label><textarea id="notes" maxlength="1000" placeholder="What do they need? What did you discuss?"></textarea></div>
+          </div>
+          <div class="form-actions"><button class="btn primary" type="submit" id="saveBtn">＋ Save lead</button><button class="btn" type="button" id="resetBtn">Clear</button></div>
+        </form>
+        <div class="hint-box">Tip: Add the next follow-up date whenever you speak with a prospect. Small, consistent follow-ups help keep deals moving.</div>
+        <div class="privacy">▣ <span><b>Your data stays in this browser on this device.</b> This first version does not sync to a cloud account. Export a backup regularly and avoid storing sensitive personal information.</span></div>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="panel-head"><h3>Your sales pipeline</h3><span class="sub" id="leadCountLabel">0 records</span></div>
+      <div class="panel-body" style="padding-bottom:12px">
+        <div class="toolbar"><div class="search-wrap"><input class="search" id="search" type="search" placeholder="Search name, email, phone…"></div><select id="filterStage" aria-label="Filter by status"><option value="All">All statuses</option><option>New</option><option>Contacted</option><option>Qualified</option><option>Won</option><option>Lost</option></select><select id="sortBy" aria-label="Sort leads"><option value="recent">Newest first</option><option value="followup">Follow-up date</option><option value="value">Highest value</option></select></div>
+      </div>
+      <div class="table-wrap"><table><thead><tr><th>Customer</th><th>Deal value</th><th>Status</th><th>Follow-up</th><th>Actions</th></tr></thead><tbody id="leadRows"></tbody></table><div class="empty" id="emptyState"><strong>No leads yet</strong>Add your first enquiry using the form.</div></div>
+    </section>
+  </main>
+  <div class="footer">AQERIVO TECHNOLOGIES · SALES TRACKER · Version 0.2 · Built for growing businesses</div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal-backdrop" id="deleteModal"><div class="modal"><h3>Delete this lead?</h3><p>This removes the lead from this browser. Export a backup first if you may need the record later.</p><div class="modal-actions"><button class="btn" id="cancelDelete">Cancel</button><button class="btn danger" id="confirmDelete">Delete lead</button></div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(()=>{
+'use strict';
+const SUPABASE_URL='https://wjdisalogmaeaghbidcf.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_6zPFbFCySQ3EJ7oelJ_u6A_q_lnM0Fq';
+const SITE_URL='https://pavankumarrathodrecords-cyber.github.io/aqerivo-sales-tracker/';
+const KEY='nova_sales_tracker_v1'; // read-only migration source from the original v0.1 app
+const $=id=>document.getElementById(id);
+let supabase=null, currentUser=null, leads=[], pendingDelete=null;
+function setAuthMessage(msg,isError=false){const el=$('authMessage');el.textContent=msg;el.style.color=isError?'#b8324b':''}
+function toast(msg){const el=$('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600)}
+function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function money(n,c){const value=Number(n)||0;try{return new Intl.NumberFormat(undefined,{style:'currency',currency:c||'INR',maximumFractionDigits:2}).format(value)}catch(e){return (c||'')+' '+value.toFixed(2)}}
+function totalsByCurrency(items){const totals={};items.forEach(x=>{const c=x.currency||'INR';totals[c]=(totals[c]||0)+Number(x.value||0)});return Object.keys(totals).sort().map(c=>money(totals[c],c)).join(' · ')||money(0,'INR')}
+function dateLabel(v){if(!v)return '—';const d=new Date(v+'T00:00:00');return isNaN(d)?'—':d.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}
+function render(){
+ const active=leads.filter(x=>!['Won','Lost'].includes(x.stage));
+ const won=leads.filter(x=>x.stage==='Won'),closed=leads.filter(x=>['Won','Lost'].includes(x.stage));
+ $('totalLeads').textContent=leads.length;$('pipelineValue').textContent=totalsByCurrency(active);$('wonRevenue').textContent=totalsByCurrency(won);
+ $('winRate').textContent=(closed.length?Math.round(won.length/closed.length*100):0)+'%';
+ $('leadCountLabel').textContent=leads.length+' record'+(leads.length===1?'':'s');
+ const q=$('search').value.trim().toLowerCase(),stage=$('filterStage').value,sort=$('sortBy').value;
+ let list=leads.filter(x=>(stage==='All'||x.stage===stage)&&[x.name,x.email,x.phone,x.notes,x.source].join(' ').toLowerCase().includes(q));
+ if(sort==='value')list.sort((a,b)=>Number(b.value)-Number(a.value));else if(sort==='followup')list.sort((a,b)=>(a.followup||'9999').localeCompare(b.followup||'9999'));else list.sort((a,b)=>b.createdAt-a.createdAt);
+ $('emptyState').style.display=list.length?'none':'block';
+ $('leadRows').innerHTML=list.map(x=>`<tr><td><div class="customer">${safe(x.name)}</div><div class="sub">${safe(x.email||x.phone||x.source||'No contact details')}</div></td><td class="amount">${money(x.value,x.currency)}</td><td><span class="pill ${safe(x.stage)}">${safe(x.stage)}</span></td><td>${dateLabel(x.followup)}</td><td><div class="row-actions"><button class="icon-btn" data-edit="${safe(x.id)}" aria-label="Edit ${safe(x.name)}">Edit</button><button class="icon-btn" data-delete="${safe(x.id)}" aria-label="Delete ${safe(x.name)}">Delete</button></div></td></tr>`).join('');
+}
+function resetForm(){$('leadForm').reset();$('leadId').value='';$('formTitle').textContent='Add a new lead';$('saveBtn').textContent='＋ Save lead';$('currency').value='INR';$('stage').value='New'}
+function toDb(x){return {user_id:currentUser.id,name:x.name,company:x.company||null,email:x.email||null,phone:x.phone||null,deal_value:Number(x.value)||0,currency:x.currency||'INR',status:(x.stage||'New').toLowerCase(),source:x.source||null,next_follow_up:x.followup||null,notes:x.notes||null,updated_at:new Date().toISOString()}}
+function fromDb(x){return {id:x.id,name:x.name,email:x.email||'',phone:x.phone||'',value:Number(x.deal_value)||0,currency:x.currency||'INR',stage:(x.status||'new').charAt(0).toUpperCase()+(x.status||'new').slice(1),source:x.source||'Other',followup:x.next_follow_up||'',notes:x.notes||'',createdAt:new Date(x.created_at).getTime()||Date.now(),updatedAt:new Date(x.updated_at).getTime()||Date.now()}}
+async function loadCloudLeads(){
+ const {data,error}=await supabase.from('leads').select('*').order('created_at',{ascending:false});
+ if(error)throw error;
+ leads=(data||[]).map(fromDb);render();
+}
+function loadLegacy(){try{const raw=localStorage.getItem(KEY);const d=raw?JSON.parse(raw):[];return Array.isArray(d)?d:[]}catch(e){return []}}
+async function maybeImportLegacy(){
+ const marker='aqerivo_migrated_'+currentUser.id;
+ if(localStorage.getItem(marker))return;
+ const legacy=loadLegacy();
+ if(!legacy.length){localStorage.setItem(marker,'1');return}
+ const {count,error:countError}=await supabase.from('leads').select('id',{count:'exact',head:true});
+ if(countError)throw countError;
+ if(count>0){localStorage.setItem(marker,'1');return}
+ if(confirm('We found '+legacy.length+' leads saved in this browser from the previous version. Import them into your AQERIVO cloud account?')){
+   const rows=legacy.map(x=>toDb(x));
+   const {error}=await supabase.from('leads').insert(rows);
+   if(error)throw error;
+   toast('Previous leads imported into your cloud account.');
+ }
+ localStorage.setItem(marker,'1');
+ await loadCloudLeads();
+}
+function showSignedOut(){
+ currentUser=null;$('authPanel').hidden=false;$('accountStrip').hidden=true;$('appArea').hidden=true;
+ leads=[];render();
+}
+async function showSignedIn(user){
+ currentUser=user;$('authPanel').hidden=true;$('accountStrip').hidden=false;$('appArea').hidden=false;
+ $('signedInEmail').textContent=user.email||'Account';
+ try{await loadCloudLeads();await maybeImportLegacy();}catch(e){toast('Cloud load failed: '+(e.message||'Check database setup'));console.error(e)}
+}
+async function saveLead(e){
+ e.preventDefault();
+ const id=$('leadId').value,old=leads.find(x=>x.id===id);
+ const item={id,name:$('name').value.trim(),email:$('email').value.trim(),phone:$('phone').value.trim(),value:Number($('value').value),currency:$('currency').value,stage:$('stage').value,source:$('source').value,followup:$('followup').value,notes:$('notes').value.trim(),createdAt:old?.createdAt||Date.now(),updatedAt:Date.now()};
+ if(!item.name){toast('Enter a customer or business name.');return}
+ if(!Number.isFinite(item.value)||item.value<0){toast('Enter a valid deal value.');return}
+ $('saveBtn').disabled=true;
+ try{
+   let query;
+   if(old)query=await supabase.from('leads').update(toDb(item)).eq('id',id).select().single();
+   else query=await supabase.from('leads').insert(toDb(item)).select().single();
+   if(query.error)throw query.error;
+   if(old)leads=leads.map(x=>x.id===id?fromDb(query.data):x);else leads.unshift(fromDb(query.data));
+   render();resetForm();toast(old?'Lead updated in cloud.':'Lead saved to cloud.');
+ }catch(err){toast('Could not save: '+(err.message||'Please try again'));console.error(err)}
+ finally{$('saveBtn').disabled=false}
+}
+$('leadForm').addEventListener('submit',saveLead);
+$('resetBtn').addEventListener('click',resetForm);
+$('leadRows').addEventListener('click',async e=>{
+ const edit=e.target.closest('[data-edit]'),del=e.target.closest('[data-delete]');
+ if(edit){const x=leads.find(v=>v.id===edit.dataset.edit);if(!x)return;$('leadId').value=x.id;$('name').value=x.name;$('email').value=x.email;$('phone').value=x.phone;$('value').value=x.value;$('currency').value=x.currency;$('stage').value=x.stage;$('source').value=x.source;$('followup').value=x.followup;$('notes').value=x.notes;$('formTitle').textContent='Edit lead';$('saveBtn').textContent='Save changes';window.scrollTo({top:0,behavior:'smooth'})}
+ if(del){pendingDelete=del.dataset.delete;$('deleteModal').classList.add('show')}
+});
+$('cancelDelete').addEventListener('click',()=>{$('deleteModal').classList.remove('show');pendingDelete=null});
+$('confirmDelete').addEventListener('click',async()=>{
+ if(pendingDelete){const id=pendingDelete;try{const {error}=await supabase.from('leads').delete().eq('id',id);if(error)throw error;leads=leads.filter(x=>x.id!==id);render();if($('leadId').value===id)resetForm();toast('Lead deleted from cloud.')}catch(e){toast('Delete failed: '+e.message)}}
+ pendingDelete=null;$('deleteModal').classList.remove('show')
+});
+['search','filterStage','sortBy'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',render));
+$('exportCsv').addEventListener('click',()=>{
+ if(!leads.length){toast('There are no leads to export.');return}
+ const cols=['name','email','phone','value','currency','stage','source','followup','notes','createdAt'];
+ const csv=[cols.join(','),...leads.map(x=>cols.map(k=>'"'+String(x[k]??'').replace(/"/g,'""')+'"').join(','))].join('\r\n');
+ download(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}),'aqerivo-sales-leads.csv');toast('CSV exported.')
+});
+$('backupBtn').addEventListener('click',()=>{download(new Blob([JSON.stringify({app:'AQERIVO Sales Tracker',version:2,exportedAt:new Date().toISOString(),leads},null,2)],{type:'application/json'}),'aqerivo-sales-backup.json');toast('Backup downloaded.')});
+$('restoreBtn').addEventListener('click',()=>$('restoreFile').click());
+$('restoreFile').addEventListener('change',async e=>{
+ const f=e.target.files[0];if(!f)return;
+ try{const obj=JSON.parse(await f.text()),arr=Array.isArray(obj)?obj:obj.leads;if(!Array.isArray(arr))throw new Error('Invalid backup');
+ const valid=arr.filter(x=>x&&x.name&&Number.isFinite(Number(x.value)));
+ if(!confirm('Import '+valid.length+' leads into your cloud account? Existing leads will be kept.'))return;
+ const rows=valid.map(x=>toDb(x));
+ if(rows.length){const {error}=await supabase.from('leads').insert(rows);if(error)throw error}
+ await loadCloudLeads();toast('Backup leads imported.')
+ }catch(err){toast('Could not import backup: '+(err.message||''))}finally{e.target.value=''}
+});
+function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+$('todayLabel').textContent=new Date().toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'long',year:'numeric'});
+$('authForm').addEventListener('submit',async e=>{
+ e.preventDefault();if(!supabase){setAuthMessage('Supabase setup is incomplete. Add the publishable key in the app code.',true);return}
+ const email=$('authEmail').value.trim(),password=$('authPassword').value;
+ $('loginBtn').disabled=true;
+ try{const {data,error}=await supabase.auth.signInWithPassword({email,password});if(error)throw error;setAuthMessage('Sign-in successful. Loading your cloud workspace…')}
+ catch(err){setAuthMessage(err.message||'Sign-in failed.',true)}
+ finally{$('loginBtn').disabled=false}
+});
+$('signupBtn').addEventListener('click',async()=>{
+ if(!supabase){setAuthMessage('Supabase setup is incomplete. Add the publishable key in the app code.',true);return}
+ const email=$('authEmail').value.trim(),password=$('authPassword').value;
+ if(!email||password.length<8){setAuthMessage('Enter an email and a password with at least 8 characters.',true);return}
+ $('signupBtn').disabled=true;
+ try{const {data,error}=await supabase.auth.signUp({email,password,options:{emailRedirectTo:SITE_URL}});if(error)throw error;
+ setAuthMessage(data.session?'Account created and signed in.':'Account created. Check your email to confirm the address, then sign in.')}
+ catch(err){setAuthMessage(err.message||'Account creation failed.',true)}
+ finally{$('signupBtn').disabled=false}
+});
+$('logoutBtn').addEventListener('click',async()=>{const {error}=await supabase.auth.signOut();if(error){toast(error.message);return}showSignedOut()});
+$('todayLabel').textContent=new Date().toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'long',year:'numeric'});
+if(window.supabase?.createClient && SUPABASE_PUBLISHABLE_KEY!=='PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE'){
+ supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+ supabase.auth.getSession().then(({data})=>{if(data.session)showSignedIn(data.session.user);else showSignedOut()});
+ supabase.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_IN'&&session?.user)showSignedIn(session.user);if(event==='SIGNED_OUT')showSignedOut()});
+}else{
+ showSignedOut();setAuthMessage('App integration file is ready, but the Supabase publishable key still needs to be added before login can work.',true)
+}
+})();
+</script>
+</body>
+</html>
