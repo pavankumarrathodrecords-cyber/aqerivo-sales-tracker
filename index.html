@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b1220">
+<title>AQERIVO Sales Tracker</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#f3f6fb;--card:#fff;--ink:#152238;--muted:#64748b;--line:#e5eaf2;--blue:#1769e0;--blue2:#eaf2ff;--green:#0f9d70;--red:#c43d4b;--shadow:0 12px 35px rgba(20,40,75,.07)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.top{background:#0b1220;color:white;padding:15px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.brand{display:flex;align-items:center;gap:10px}.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#1d74ed,#0a3e9e);display:grid;place-items:center;font-weight:800;font-size:20px}.brand strong{display:block;font-size:15px;letter-spacing:.3px}.brand small{color:#a9b8ce}.top-actions{display:flex;gap:8px;flex-wrap:wrap}.wrap{max-width:1120px;margin:24px auto;padding:0 14px}.btn{border:1px solid var(--line);background:white;color:var(--ink);padding:9px 13px;border-radius:9px;font-weight:600}.btn.primary{background:var(--blue);border-color:var(--blue);color:white}.btn.danger{color:var(--red)}.btn:disabled{opacity:.55;cursor:not-allowed}.panel{background:var(--card);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);margin-bottom:16px}.panel-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.panel-head h2{margin:0;font-size:16px}.panel-body{padding:18px}.auth{max-width:470px;margin:42px auto}.auth p{color:var(--muted)}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field.full{grid-column:1/-1}.field label{display:block;font-weight:650;font-size:12px;margin:0 0 5px;color:#42516a}.field input,.field select,.field textarea,.toolbar input,.toolbar select{width:100%;border:1px solid #d8e0ec;border-radius:9px;padding:10px 11px;background:white;color:var(--ink);outline:none}.field input:focus,.field select:focus,.field textarea:focus,.toolbar input:focus{border-color:var(--blue);box-shadow:0 0 0 3px #1769e01a}.field textarea{min-height:76px;resize:vertical}.form-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.hint{font-size:12px;color:var(--muted);margin-top:10px}.message{margin-top:12px;padding:10px 12px;border-radius:9px;background:#fff4e5;color:#8a4b08;font-size:13px;display:none;overflow-wrap:anywhere}.message.show{display:block}.message.error{background:#fff0f1;color:#a32735}.message.success{background:#eafaf3;color:#08764f}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}.stat{background:white;border:1px solid var(--line);border-radius:13px;padding:14px;box-shadow:var(--shadow)}.stat .label{font-size:12px;color:var(--muted)}.stat .value{font-size:22px;font-weight:750;margin-top:4px}.stat .sub{font-size:11px;color:var(--muted)}.toolbar{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:9px;margin-bottom:12px}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:720px}th,td{text-align:left;padding:12px 13px;border-bottom:1px solid var(--line);vertical-align:middle}th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:#f8faff}td{font-size:13px}.customer{font-weight:700}.subtext{font-size:11px;color:var(--muted)}.pill{display:inline-block;padding:4px 8px;border-radius:99px;background:#eef2f7;color:#475569;font-size:11px;font-weight:700}.pill.won{background:#e8f8f0;color:#08764f}.pill.lost{background:#fff0f1;color:#a32735}.pill.qualified{background:#f1edff;color:#6741b8}.pill.contacted{background:#eaf2ff;color:#1757b8}.empty{text-align:center;color:var(--muted);padding:28px}.hidden{display:none!important}.footer{text-align:center;color:#8290a5;font-size:11px;padding:18px}.userbar{font-size:12px;color:#c6d3e5}.modal-backdrop{position:fixed;inset:0;background:#08132699;display:none;align-items:center;justify-content:center;padding:16px;z-index:5}.modal-backdrop.show{display:flex}.modal{width:min(460px,100%);background:white;border-radius:15px;padding:20px;box-shadow:0 20px 70px #0003}.modal h3{margin:0 0 8px}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#172238;color:white;padding:10px 15px;border-radius:10px;box-shadow:var(--shadow);display:none;z-index:9;max-width:90%;text-align:center}.toast.show{display:block}
+@media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr}.wrap{margin:15px auto}.auth{margin:24px auto}.panel-body{padding:14px}.field-grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><div class="logo">A</div><div><strong>AQERIVO TECHNOLOGIES</strong><small>Innovate. Build. Evolve.</small></div></div>
+  <div class="top-actions">
+    <span id="userLabel" class="userbar hidden"></span>
+    <button class="btn" id="exportBtn">↓ Export CSV</button>
+    <button class="btn" id="backupBtn">↓ Backup</button>
+    <button class="btn" id="restoreBtn">↑ Restore</button>
+    <input type="file" id="restoreFile" accept="application/json" class="hidden">
+    <button class="btn hidden" id="logoutBtn">Sign out</button>
+  </div>
+</header>
+<main class="wrap">
+  <section class="panel auth" id="authPanel">
+    <div class="panel-head"><h2>AQERIVO account</h2><span class="pill">CLOUD VERSION</span></div>
+    <div class="panel-body">
+      <p>Sign in to securely access your sales leads across devices, or create a new account.</p>
+      <form id="authForm">
+        <div class="field"><label for="authEmail">Email address</label><input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com"></div>
+        <div class="field" style="margin-top:12px"><label for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="current-password" minlength="8" required placeholder="At least 8 characters"></div>
+        <div class="form-actions">
+          <button class="btn primary" id="loginBtn" type="button" style="flex:1">Sign in</button>
+          <button class="btn" id="signupBtn" type="button" style="flex:1">Create account</button>
+        </div>
+      </form>
+      <div class="hint">New accounts may need to confirm their email before signing in. Use the same email on each device.</div>
+      <div class="message" id="authMessage" role="status"></div>
+    </div>
+  </section>
+
+  <section id="appArea" class="hidden">
+    <div class="stats" aria-label="Sales summary">
+      <div class="stat"><div class="label">Total leads</div><div class="value" id="totalLeads">0</div><div class="sub">All saved leads</div></div>
+      <div class="stat"><div class="label">Open pipeline</div><div class="value" id="pipelineValue">₹0</div><div class="sub">New to qualified</div></div>
+      <div class="stat"><div class="label">Won revenue</div><div class="value" id="wonRevenue">₹0</div><div class="sub">Closed won deals</div></div>
+      <div class="stat"><div class="label">Win rate</div><div class="value" id="winRate">0%</div><div class="sub">Won / closed leads</div></div>
+    </div>
+    <section class="panel">
+      <div class="panel-head"><h2 id="formTitle">Add a new lead</h2><span class="pill">QUICK ENTRY</span></div>
+      <div class="panel-body">
+        <form id="leadForm">
+          <input type="hidden" id="leadId">
+          <div class="field-grid">
+            <div class="field"><label for="name">Customer / business name *</label><input id="name" required maxlength="120" placeholder="Customer name"></div>
+            <div class="field"><label for="company">Company</label><input id="company" maxlength="120" placeholder="Company name"></div>
+            <div class="field"><label for="email">Email</label><input id="email" type="email" maxlength="120" placeholder="name@example.com"></div>
+            <div class="field"><label for="phone">Phone / WhatsApp</label><input id="phone" type="tel" maxlength="30" placeholder="Phone number"></div>
+            <div class="field"><label for="value">Deal value</label><input id="value" type="number" min="0" step="0.01" value="0"></div>
+            <div class="field"><label for="currency">Currency</label><select id="currency"><option value="INR">INR ₹</option><option value="USD">USD $</option><option value="EUR">EUR €</option><option value="GBP">GBP £</option></select></div>
+            <div class="field"><label for="status">Lead status</label><select id="status"><option value="new">New</option><option value="contacted">Contacted</option><option value="qualified">Qualified</option><option value="won">Won</option><option value="lost">Lost</option></select></div>
+            <div class="field"><label for="source">Lead source</label><select id="source"><option value="">Select source</option><option>Website</option><option>WhatsApp</option><option>Referral</option><option>Social media</option><option>Advertisement</option><option>Other</option></select></div>
+            <div class="field"><label for="followup">Next follow-up date</label><input id="followup" type="date"></div>
+            <div class="field full"><label for="notes">Notes</label><textarea id="notes" maxlength="2000" placeholder="What does the customer need? Next action?"></textarea></div>
+          </div>
+          <div class="form-actions"><button class="btn primary" type="submit" id="saveBtn">＋ Save lead</button><button class="btn hidden" type="button" id="cancelEditBtn">Cancel edit</button></div>
+        </form>
+        <div class="hint">Your leads are stored in your AQERIVO cloud account and protected by Supabase Row Level Security.</div>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="panel-head"><h2>Your sales pipeline</h2><span class="subtext" id="leadCountLabel">0 records</span></div>
+      <div class="panel-body">
+        <div class="toolbar">
+          <input id="search" type="search" placeholder="Search name, company, email or phone">
+          <select id="filterStatus"><option value="">All statuses</option><option value="new">New</option><option value="contacted">Contacted</option><option value="qualified">Qualified</option><option value="won">Won</option><option value="lost">Lost</option></select>
+          <select id="sortBy"><option value="recent">Newest first</option><option value="oldest">Oldest first</option><option value="value">Highest deal value</option><option value="followup">Next follow-up</option></select>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Customer</th><th>Deal value</th><th>Status</th><th>Follow-up</th><th>Source</th><th>Actions</th></tr></thead><tbody id="leadRows"><tr><td colspan="6" class="empty">Sign in to load your leads.</td></tr></tbody></table></div>
+      </div>
+    </section>
+  </section>
+  <div class="footer">AQERIVO TECHNOLOGIES · SALES TRACKER · Version 0.3</div>
+</main>
+<div class="toast" id="toast" role="status"></div>
+<div class="modal-backdrop" id="deleteModal"><div class="modal"><h3>Delete this lead?</h3><p>This action cannot be undone.</p><div class="form-actions"><button class="btn danger" id="confirmDeleteBtn">Delete lead</button><button class="btn" id="cancelDeleteBtn">Cancel</button></div></div></div>
+
+<script>
+(() => {
+'use strict';
+
+// These are the public project URL and publishable key. Never put a database password
+// or Supabase secret/service-role key in browser code.
+const SUPABASE_URL = 'https://wjdisalogmaeaghbidcf.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_6zPFbFCySQ3EJ7oelJ_u6A_q_lnM0Fq';
+const $ = id => document.getElementById(id);
+let supabaseClient = null, currentUser = null, leads = [], pendingDeleteId = null;
+
+function message(id, text, type='') {
+  const el=$(id); el.textContent=text; el.className='message show '+type;
+}
+function clearMessage(id){const el=$(id);el.textContent='';el.className='message';}
+function toast(text){const el=$('toast');el.textContent=text;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600);}
+function money(amount,currency='INR'){
+  const n=Number(amount)||0;
+  try{return new Intl.NumberFormat(undefined,{style:'currency',currency,maximumFractionDigits:2}).format(n)}
+  catch{return currency+' '+n.toFixed(2)}
+}
+function dateLabel(v){if(!v)return '—';const d=new Date(v+'T00:00:00');return Number.isNaN(d.getTime())?'—':d.toLocaleDateString();}
+function statusLabel(s){return ({new:'New',contacted:'Contacted',qualified:'Qualified',won:'Won',lost:'Lost'})[s]||s||'New';}
+function statusPill(s){return '<span class="pill '+(s||'new')+'">'+statusLabel(s)+'</span>';}
+function showSignedOut(){
+  currentUser=null;leads=[];$('authPanel').classList.remove('hidden');$('appArea').classList.add('hidden');$('logoutBtn').classList.add('hidden');$('userLabel').classList.add('hidden');render();
+}
+function showSignedIn(user){
+  currentUser=user;$('authPanel').classList.add('hidden');$('appArea').classList.remove('hidden');$('logoutBtn').classList.remove('hidden');$('userLabel').classList.remove('hidden');$('userLabel').textContent=user.email||'Signed in';loadLeads();
+}
+function dbToLead(row){return {id:row.id,name:row.name||'',company:row.company||'',email:row.email||'',phone:row.phone||'',value:Number(row.deal_value)||0,currency:row.currency||'INR',status:row.status||'new',source:row.source||'',followup:row.next_follow_up||'',notes:row.notes||'',created_at:row.created_at};}
+function leadToDb(x){return {user_id:currentUser.id,name:x.name,company:x.company||null,email:x.email||null,phone:x.phone||null,deal_value:Number(x.value)||0,currency:x.currency||'INR',status:x.status||'new',source:x.source||null,next_follow_up:x.followup||null,notes:x.notes||null,updated_at:new Date().toISOString()};}
+function render(){
+  const open=leads.filter(x=>!['won','lost'].includes(x.status));
+  const won=leads.filter(x=>x.status==='won');
+  const closed=leads.filter(x=>['won','lost'].includes(x.status));
+  $('totalLeads').textContent=leads.length;
+  const sum=(arr)=>arr.reduce((a,x)=>a+(Number(x.value)||0),0);
+  $('pipelineValue').textContent=money(sum(open),'INR');
+  $('wonRevenue').textContent=money(sum(won),'INR');
+  $('winRate').textContent=(closed.length?Math.round(won.length/closed.length*100):0)+'%';
+  $('leadCountLabel').textContent=leads.length+' record'+(leads.length===1?'':'s');
+  const q=$('search').value.trim().toLowerCase(), status=$('filterStatus').value, sort=$('sortBy').value;
+  let list=leads.filter(x=>(!status||x.status===status)&&(!q||[x.name,x.company,x.email,x.phone,x.source].join(' ').toLowerCase().includes(q)));
+  if(sort==='oldest')list.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
+  else if(sort==='value')list.sort((a,b)=>b.value-a.value);
+  else if(sort==='followup')list.sort((a,b)=>(a.followup||'9999').localeCompare(b.followup||'9999'));
+  else list.sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
+  $('leadRows').innerHTML=list.length?list.map(x=>`<tr>
+    <td><div class="customer">${escapeHtml(x.name)}</div><div class="subtext">${escapeHtml(x.company||x.email||x.phone||'')}</div></td>
+    <td>${escapeHtml(money(x.value,x.currency))}</td><td>${statusPill(x.status)}</td>
+    <td>${escapeHtml(dateLabel(x.followup))}</td><td>${escapeHtml(x.source||'—')}</td>
+    <td><button class="btn" data-edit="${x.id}">Edit</button> <button class="btn danger" data-delete="${x.id}">Delete</button></td>
+  </tr>`).join(''):`<tr><td colspan="6" class="empty">${leads.length?'No matching leads.':'No leads yet. Add your first lead above.'}</td></tr>`;
+}
+function escapeHtml(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+async function loadLeads(){
+  if(!supabaseClient||!currentUser)return;
+  $('leadRows').innerHTML='<tr><td colspan="6" class="empty">Loading your leads…</td></tr>';
+  const {data,error}=await supabaseClient.from('leads').select('*').order('created_at',{ascending:false});
+  if(error){$('leadRows').innerHTML='<tr><td colspan="6" class="empty">Could not load leads: '+escapeHtml(error.message)+'</td></tr>';toast('Cloud load failed. Check your leads table and RLS policies.');return;}
+  leads=(data||[]).map(dbToLead);render();
+}
+function resetForm(){
+  $('leadForm').reset();$('leadId').value='';$('value').value='0';$('currency').value='INR';$('status').value='new';
+  $('formTitle').textContent='Add a new lead';$('saveBtn').textContent='＋ Save lead';$('cancelEditBtn').classList.add('hidden');
+}
+function editLead(id){
+  const x=leads.find(v=>v.id===id);if(!x)return;
+  $('leadId').value=x.id;$('name').value=x.name;$('company').value=x.company;$('email').value=x.email;$('phone').value=x.phone;
+  $('value').value=x.value;$('currency').value=x.currency;$('status').value=x.status;$('source').value=x.source;
+  $('followup').value=x.followup;$('notes').value=x.notes;$('formTitle').textContent='Edit lead';$('saveBtn').textContent='Save changes';$('cancelEditBtn').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+async function saveLead(e){
+  e.preventDefault();if(!currentUser)return;
+  const item={name:$('name').value.trim(),company:$('company').value.trim(),email:$('email').value.trim(),phone:$('phone').value.trim(),value:Number($('value').value)||0,currency:$('currency').value,status:$('status').value,source:$('source').value,followup:$('followup').value,notes:$('notes').value.trim()};
+  if(!item.name){toast('Enter a customer or business name.');return;}
+  const id=$('leadId').value; $('saveBtn').disabled=true;
+  try{
+    let result;
+    if(id) result=await supabaseClient.from('leads').update(leadToDb(item)).eq('id',id).select().single();
+    else result=await supabaseClient.from('leads').insert(leadToDb(item)).select().single();
+    if(result.error)throw result.error;
+    const saved=dbToLead(result.data);
+    if(id)leads=leads.map(x=>x.id===id?saved:x);else leads.unshift(saved);
+    render();resetForm();toast(id?'Lead updated in cloud.':'Lead saved to cloud.');
+  }catch(err){toast('Could not save: '+(err.message||'Please try again.'));}
+  finally{$('saveBtn').disabled=false;}
+}
+async function deleteLead(){
+  if(!pendingDeleteId)return;
+  const id=pendingDeleteId;$('confirmDeleteBtn').disabled=true;
+  try{const {error}=await supabaseClient.from('leads').delete().eq('id',id);if(error)throw error;
+    leads=leads.filter(x=>x.id!==id);render();toast('Lead deleted.');}
+  catch(err){toast('Delete failed: '+err.message);}
+  finally{pendingDeleteId=null;$('deleteModal').classList.remove('show');$('confirmDeleteBtn').disabled=false;}
+}
+function downloadFile(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);}
+function exportCsv(){
+  if(!leads.length){toast('There are no leads to export.');return;}
+  const cols=['name','company','email','phone','value','currency','status','source','followup','notes','created_at'];
+  const csv=[cols.join(','),...leads.map(x=>cols.map(k=>'"'+String(k==='value'?x[k]??0:x[k]??'').replace(/"/g,'""')+'"').join(','))].join('\r\n');
+  downloadFile(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}),'aqerivo-leads.csv');
+}
+function backup(){
+  downloadFile(new Blob([JSON.stringify({app:'AQERIVO Sales Tracker',version:3,exported_at:new Date().toISOString(),leads},null,2)],{type:'application/json'}),'aqerivo-backup.json');
+}
+async function restoreFile(file){
+  if(!file||!currentUser)return;
+  try{
+    const obj=JSON.parse(await file.text()),rows=Array.isArray(obj)?obj:obj.leads;
+    if(!Array.isArray(rows))throw new Error('This backup file does not contain a leads list.');
+    if(!confirm('Import '+rows.length+' leads into your cloud account? Existing leads will be kept.'))return;
+    const mapped=rows.filter(x=>x.name).map(x=>leadToDb({name:String(x.name),company:x.company||'',email:x.email||'',phone:x.phone||'',value:x.value??x.deal_value??0,currency:x.currency||'INR',status:x.status||x.stage||'new',source:x.source||'',followup:x.followup||x.next_follow_up||'',notes:x.notes||''}));
+    if(mapped.length){const {error}=await supabaseClient.from('leads').insert(mapped);if(error)throw error;}
+    await loadLeads();toast('Backup imported.');
+  }catch(err){toast('Import failed: '+err.message);}
+  finally{$('restoreFile').value='';}
+}
+async function authAction(kind){
+  clearMessage('authMessage');
+  const email=$('authEmail').value.trim(),password=$('authPassword').value;
+  if(!email||password.length<8){message('authMessage','Enter a valid email and a password with at least 8 characters.','error');return;}
+  const btn=kind==='login'?'loginBtn':'signupBtn';$(btn).disabled=true;
+  try{
+    const result=kind==='login'?await supabaseClient.auth.signInWithPassword({email,password}):await supabaseClient.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}});
+    if(result.error)throw result.error;
+    if(kind==='signup'&&!result.data.session){message('authMessage','Account created. Check your email and confirm your address, then sign in.','success');}
+    else if(result.data.user){message('authMessage','Signed in successfully.','success');showSignedIn(result.data.user);}
+  }catch(err){message('authMessage',err.message||'Authentication failed.','error');}
+  finally{$(btn).disabled=false;}
+}
+async function init(){
+  if(!window.supabase||!window.supabase.createClient){message('authMessage','Supabase library did not load. Check your internet connection and refresh.','error');return;}
+  if(!SUPABASE_URL.startsWith('https://')||!SUPABASE_PUBLISHABLE_KEY.startsWith('sb_publishable_')){
+    message('authMessage','Supabase setup is incomplete. Check the project URL and publishable key.','error');return;
+  }
+  supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+  $('loginBtn').addEventListener('click',()=>authAction('login'));
+  $('signupBtn').addEventListener('click',()=>authAction('signup'));
+  $('logoutBtn').addEventListener('click',async()=>{const {error}=await supabaseClient.auth.signOut();if(error)toast(error.message);else showSignedOut();});
+  $('leadForm').addEventListener('submit',saveLead);$('cancelEditBtn').addEventListener('click',resetForm);
+  ['search','filterStatus','sortBy'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',render));
+  $('leadRows').addEventListener('click',e=>{
+    const edit=e.target.closest('[data-edit]'),del=e.target.closest('[data-delete]');
+    if(edit)editLead(edit.dataset.edit);
+    if(del){pendingDeleteId=del.dataset.delete;$('deleteModal').classList.add('show');}
+  });
+  $('confirmDeleteBtn').addEventListener('click',deleteLead);$('cancelDeleteBtn').addEventListener('click',()=>{$('deleteModal').classList.remove('show');pendingDeleteId=null;});
+  $('exportBtn').addEventListener('click',exportCsv);$('backupBtn').addEventListener('click',backup);
+  $('restoreBtn').addEventListener('click',()=>currentUser?$('restoreFile').click():toast('Sign in first to import a backup.'));
+  $('restoreFile').addEventListener('change',e=>restoreFile(e.target.files[0]));
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(session?.user)showSignedIn(session.user);else showSignedOut();
+  supabaseClient.auth.onAuthStateChange((_event,sessionNow)=>{if(sessionNow?.user&&!currentUser)showSignedIn(sessionNow.user);else if(!sessionNow?.user&&currentUser)showSignedOut();});
+}
+init();
+})();
+</script>
+</body>
+</html>
