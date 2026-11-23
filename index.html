@@ -33,6 +33,7 @@ body{background:linear-gradient(180deg,#f5f7fc 0,#f7f9fd 260px,#f3f6fb 100%)}
 .followup-card.overdue{background:#fff8f7;border-color:#f3d7d5}.followup-card.overdue .due{color:#b43d39}
 .followup-card.today{background:#fffaf0;border-color:#f3e4bc}.followup-card.today .due{color:#946200}
 .followup-card button{margin-top:9px;padding:6px 9px;font-size:11px}
+.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.bar-row{display:grid;grid-template-columns:100px 1fr 36px;gap:9px;align-items:center;margin:12px 0;font-size:12px}.bar-track{height:9px;border-radius:99px;background:#edf1f7;overflow:hidden}.bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#2563eb,#7564df)}.profile-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:15px 0}.profile-item{background:#f7f9fc;border:1px solid #e8edf5;border-radius:10px;padding:11px}.profile-item small{display:block;color:#718096;font-size:11px}.profile-item strong{display:block;margin-top:3px;overflow-wrap:anywhere}.profile-notes{white-space:pre-wrap;background:#f7f9fc;padding:12px;border-radius:10px;min-height:45px}@media(max-width:720px){.analytics-grid{grid-template-columns:1fr}.profile-meta{grid-template-columns:1fr}
 @media(max-width:720px){.wrap{margin:17px auto}.top{padding:14px}.stats{gap:9px}.stat{padding:13px}.stat .value{font-size:21px}.dashboard-intro h1{font-size:22px}.followup-grid{grid-template-columns:1fr}.panel-head{padding:14px}.panel-body{padding:14px}}
 </style>
 </head>
@@ -101,6 +102,13 @@ body{background:linear-gradient(180deg,#f5f7fc 0,#f7f9fd 260px,#f3f6fb 100%)}
       </div>
     </section>
     <section class="panel">
+      <div class="panel-head"><h2>Sales analytics</h2><span class="subtext">Calculated from your saved leads</span></div>
+      <div class="panel-body analytics-grid">
+        <div><h3 style="margin:0 0 8px;font-size:14px">Lead status</h3><div id="statusAnalytics"></div></div>
+        <div><h3 style="margin:0 0 8px;font-size:14px">Lead sources</h3><div id="sourceAnalytics"></div></div>
+      </div>
+    </section>
+    <section class="panel">
       <div class="panel-head"><h2>Your sales pipeline</h2><span class="subtext" id="leadCountLabel">0 records</span></div>
       <div class="panel-body">
         <div class="toolbar">
@@ -112,9 +120,10 @@ body{background:linear-gradient(180deg,#f5f7fc 0,#f7f9fd 260px,#f3f6fb 100%)}
       </div>
     </section>
   </section>
-  <div class="footer">AQERIVO TECHNOLOGIES · SALES TRACKER · Version 0.4</div>
+  <div class="footer">AQERIVO TECHNOLOGIES · SALES TRACKER · Version 0.5</div>
 </main>
 <div class="toast" id="toast" role="status"></div>
+<div class="modal-backdrop" id="profileModal"><div class="modal"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><h3 id="profileName">Customer profile</h3><button class="btn" id="closeProfileBtn">Close</button></div><div class="subtext" id="profileCompany"></div><div class="profile-meta" id="profileMeta"></div><h4 style="margin:12px 0 7px">Notes</h4><div class="profile-notes" id="profileNotes">No notes recorded.</div><div class="form-actions"><button class="btn primary" id="profileEditBtn">Edit customer</button></div></div></div>
 <div class="modal-backdrop" id="deleteModal"><div class="modal"><h3>Delete this lead?</h3><p>This action cannot be undone.</p><div class="form-actions"><button class="btn danger" id="confirmDeleteBtn">Delete lead</button><button class="btn" id="cancelDeleteBtn">Cancel</button></div></div></div>
 
 <script>
@@ -163,6 +172,7 @@ function render(){
   $('followupCount').textContent=pending.length+' scheduled';
   const upcoming=pending.slice(0,6);
   $('followupList').innerHTML=upcoming.length?upcoming.map(x=>{const overdue=x.followup<todayKey,istoday=x.followup===todayKey;const cls=overdue?'overdue':istoday?'today':'';const label=overdue?'Overdue':istoday?'Due today':'Upcoming';return `<div class="followup-card ${cls}"><strong>${escapeHtml(x.name)}</strong><small>${escapeHtml(x.company||x.email||'Customer follow-up')}</small><div class="due">${label} · ${escapeHtml(dateLabel(x.followup))}</div><button class="btn" data-follow-edit="${x.id}">Open lead</button></div>`}).join(''):'<div class="empty">No follow-ups scheduled. Add a date when creating or editing a lead.</div>';
+  renderAnalytics();
   $('leadCountLabel').textContent=leads.length+' record'+(leads.length===1?'':'s');
   const q=$('search').value.trim().toLowerCase(), status=$('filterStatus').value, sort=$('sortBy').value;
   let list=leads.filter(x=>(!status||x.status===status)&&(!q||[x.name,x.company,x.email,x.phone,x.source].join(' ').toLowerCase().includes(q)));
@@ -174,8 +184,21 @@ function render(){
     <td><div class="customer">${escapeHtml(x.name)}</div><div class="subtext">${escapeHtml(x.company||x.email||x.phone||'')}</div></td>
     <td>${escapeHtml(money(x.value,x.currency))}</td><td>${statusPill(x.status)}</td>
     <td>${escapeHtml(dateLabel(x.followup))}</td><td>${escapeHtml(x.source||'—')}</td>
-    <td><button class="btn" data-edit="${x.id}">Edit</button> <button class="btn danger" data-delete="${x.id}">Delete</button></td>
+    <td><button class="btn" data-profile="${x.id}">Profile</button> <button class="btn" data-edit="${x.id}">Edit</button> <button class="btn danger" data-delete="${x.id}">Delete</button></td>
   </tr>`).join(''):`<tr><td colspan="6" class="empty">${leads.length?'No matching leads.':'No leads yet. Add your first lead above.'}</td></tr>`;
+}
+function renderAnalytics(){
+  const statuses=['new','contacted','qualified','won','lost'];
+  const sources={};leads.forEach(x=>{const k=x.source||'Not specified';sources[k]=(sources[k]||0)+1;});
+  const makeBars=(items)=>{const max=Math.max(1,...items.map(x=>x[1]));return items.length?items.map(([label,count])=>`<div class="bar-row"><span>${escapeHtml(label)}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(count/max*100)}%"></div></div><strong>${count}</strong></div>`).join(''):'<div class="empty">Add leads to see analytics.</div>';};
+  $('statusAnalytics').innerHTML=makeBars(statuses.map(k=>[statusLabel(k),leads.filter(x=>x.status===k).length]));
+  $('sourceAnalytics').innerHTML=makeBars(Object.entries(sources).sort((a,b)=>b[1]-a[1]));
+}
+function openProfile(id){
+  const x=leads.find(v=>v.id===id);if(!x)return;
+  $('profileName').textContent=x.name;$('profileCompany').textContent=x.company||'Individual customer';
+  $('profileMeta').innerHTML=[['Email',x.email||'Not provided'],['Phone',x.phone||'Not provided'],['Deal value',money(x.value,x.currency)],['Status',statusLabel(x.status)],['Lead source',x.source||'Not specified'],['Next follow-up',dateLabel(x.followup)],['Created',x.created_at?new Date(x.created_at).toLocaleDateString():'Not available']].map(([k,v])=>`<div class="profile-item"><small>${k}</small><strong>${escapeHtml(v)}</strong></div>`).join('');
+  $('profileNotes').textContent=x.notes||'No notes recorded.';$('profileEditBtn').dataset.editId=id;$('profileModal').classList.add('show');
 }
 function escapeHtml(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 async function loadLeads(){
@@ -271,6 +294,9 @@ async function init(){
     if(edit)editLead(edit.dataset.edit);if(followEdit)editLead(followEdit.dataset.followEdit);
     if(del){pendingDeleteId=del.dataset.delete;$('deleteModal').classList.add('show');}
   });
+  $('closeProfileBtn').addEventListener('click',()=>$('profileModal').classList.remove('show'));
+  $('profileModal').addEventListener('click',e=>{if(e.target.id==='profileModal')$('profileModal').classList.remove('show');});
+  $('profileEditBtn').addEventListener('click',e=>{$('profileModal').classList.remove('show');editLead(e.currentTarget.dataset.editId);});
   $('confirmDeleteBtn').addEventListener('click',deleteLead);$('cancelDeleteBtn').addEventListener('click',()=>{$('deleteModal').classList.remove('show');pendingDeleteId=null;});
   $('exportBtn').addEventListener('click',exportCsv);$('backupBtn').addEventListener('click',backup);
   $('restoreBtn').addEventListener('click',()=>currentUser?$('restoreFile').click():toast('Sign in first to import a backup.'));
