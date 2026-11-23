@@ -85,8 +85,8 @@ body{background:linear-gradient(180deg,#f5f7fc 0,#f7f9fd 260px,#f3f6fb 100%)}
     <div class="dashboard-intro"><div><h1>Sales overview</h1><p>Track your pipeline, manage customer relationships and stay on top of follow-ups.</p></div><span class="pill">AQERIVO CRM · v0.6</span></div>
     <div class="stats" aria-label="Sales summary">
       <div class="stat"><div class="label">Total leads</div><div class="value" id="totalLeads">0</div><div class="sub">All saved leads</div></div>
-      <div class="stat"><div class="label">Open pipeline</div><div class="value" id="pipelineValue">₹0</div><div class="sub">New to qualified</div></div>
-      <div class="stat"><div class="label">Won revenue</div><div class="value" id="wonRevenue">₹0</div><div class="sub">Closed won deals</div></div>
+      <div class="stat"><div class="label">Open pipeline</div><div class="value" id="pipelineValue">₹0</div><div class="sub">New to qualified · totals by currency</div></div>
+      <div class="stat"><div class="label">Won revenue</div><div class="value" id="wonRevenue">₹0</div><div class="sub">Closed won deals · totals by currency</div></div>
       <div class="stat"><div class="label">Win rate</div><div class="value" id="winRate">0%</div><div class="sub">Won / closed leads</div></div>
     </div>
     <section class="panel">
@@ -154,7 +154,7 @@ body{background:linear-gradient(180deg,#f5f7fc 0,#f7f9fd 260px,#f3f6fb 100%)}
 
 // These are the public project URL and publishable key. Never put a database password
 // or Supabase secret/service-role key in browser code.
-const SUPABASE_URL = 'https://wjdisalogmaeagbhidcf.supabase.co';
+const SUPABASE_URL = 'https://wjdisalogmaeaghbhidcf.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_6zPFbFCySQ3EJ7oelJ_u6A_q_lnM0Fq';
 const $ = id => document.getElementById(id);
 let supabaseClient = null, currentUser = null, leads = [], pendingDeleteId = null;
@@ -185,9 +185,24 @@ function render(){
   const won=leads.filter(x=>x.status==='won');
   const closed=leads.filter(x=>['won','lost'].includes(x.status));
   $('totalLeads').textContent=leads.length;
-  const sum=(arr)=>arr.reduce((a,x)=>a+(Number(x.value)||0),0);
-  $('pipelineValue').textContent=money(sum(open),'INR');
-  $('wonRevenue').textContent=money(sum(won),'INR');
+  // Keep currencies separate. Never add amounts from different currencies.
+  const totalsByCurrency=(arr)=>{
+    const totals={};
+    arr.forEach(x=>{
+      const currency=x.currency||'INR';
+      totals[currency]=(totals[currency]||0)+(Number(x.value)||0);
+    });
+    return totals;
+  };
+  const formatCurrencyTotals=(arr)=>{
+    const totals=totalsByCurrency(arr);
+    const currencies=Object.keys(totals).sort((a,b)=>a==='INR'?-1:b==='INR'?1:a.localeCompare(b));
+    return currencies.length
+      ? currencies.map(currency=>money(totals[currency],currency)).join(' · ')
+      : money(0,'INR');
+  };
+  $('pipelineValue').textContent=formatCurrencyTotals(open);
+  $('wonRevenue').textContent=formatCurrencyTotals(won);
   $('winRate').textContent=(closed.length?Math.round(won.length/closed.length*100):0)+'%';
   const today=new Date();today.setHours(0,0,0,0);const todayKey=today.toISOString().slice(0,10);
   const pending=leads.filter(x=>x.followup&&!['won','lost'].includes(x.status)).sort((a,b)=>a.followup.localeCompare(b.followup));
