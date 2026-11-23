@@ -46,6 +46,11 @@ body{background:linear-gradient(180deg,#f5f7fc 0,#f7f9fd 260px,#f3f6fb 100%)}
 .kanban-card strong{display:block;font-size:12px;overflow-wrap:anywhere}.kanban-card small{display:block;color:#718096;font-size:10px;margin-top:3px;overflow-wrap:anywhere}
 .kanban-value{font-weight:750;font-size:12px;margin-top:8px}.kanban-card select{width:100%;margin-top:9px;border:1px solid #e0e6ef;border-radius:7px;padding:6px;font-size:11px;background:#fff;color:#334155}
 .report-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.report-tile{background:#f7f9fc;border:1px solid #e8edf5;border-radius:12px;padding:14px}.report-tile small{display:block;color:#718096;font-size:11px}.report-tile strong{display:block;font-size:21px;margin-top:5px;overflow-wrap:anywhere}
+
+.profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.profile-status{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.profile-avatar{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,#2563eb,#735ee8);color:#fff;display:grid;place-items:center;font-size:22px;font-weight:800}
+@media(max-width:720px){.profile-grid{grid-template-columns:1fr}}
 .report-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.report-controls input{border:1px solid #d8e0ec;border-radius:9px;padding:8px 10px;background:white}
 @media(max-width:720px){.kanban{grid-template-columns:repeat(5,220px)}.report-grid{grid-template-columns:1fr}.report-tile strong{font-size:19px}}
 
@@ -76,13 +81,46 @@ body{background:linear-gradient(180deg,#f5f7fc 0,#f7f9fd 260px,#f3f6fb 100%)}
           <button class="btn" id="signupBtn" type="button" style="flex:1">Create account</button>
         </div>
       </form>
+      <div class="form-actions" style="margin-top:8px"><button class="btn" id="forgotPasswordBtn" type="button">Forgot password?</button></div>
       <div class="hint">New accounts may need to confirm their email before signing in. Use the same email on each device.</div>
       <div class="message" id="authMessage" role="status"></div>
+      <section id="passwordResetPanel" class="hidden" style="margin-top:18px;border-top:1px solid var(--line);padding-top:16px">
+        <h3 style="margin:0 0 8px;font-size:15px">Reset your password</h3>
+        <p class="hint">We will send a one-time recovery code to your email. Enter it below to choose a new password.</p>
+        <div class="field"><label for="resetEmail">Email address</label><input id="resetEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
+        <div class="form-actions"><button class="btn primary" id="sendResetOtpBtn" type="button">Send recovery code</button></div>
+        <div class="field" style="margin-top:12px"><label for="resetOtp">Email recovery code</label><input id="resetOtp" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="Enter code from email"></div>
+        <div class="field" style="margin-top:12px"><label for="newPassword">New password</label><input id="newPassword" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters"></div>
+        <div class="field" style="margin-top:12px"><label for="confirmNewPassword">Confirm new password</label><input id="confirmNewPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Re-enter new password"></div>
+        <div class="form-actions"><button class="btn primary" id="verifyResetOtpBtn" type="button">Verify code and reset password</button><button class="btn" id="cancelResetBtn" type="button">Cancel</button></div>
+        <div class="message" id="resetMessage" role="status"></div>
+      </section>
     </div>
   </section>
 
   <section id="appArea" class="hidden">
-    <div class="dashboard-intro"><div><h1>Sales overview</h1><p>Track your pipeline, manage customer relationships and stay on top of follow-ups.</p></div><span class="pill">AQERIVO CRM · v0.6</span></div>
+    <div class="dashboard-intro"><div><h1>Sales overview</h1><p>Track your pipeline, manage customer relationships and stay on top of follow-ups.</p></div><span class="pill">AQERIVO CRM · v0.7</span></div>
+    <section class="panel" id="accountProfilePanel">
+      <div class="panel-head"><div><h2>My AQERIVO profile</h2><span class="subtext">Your account details</span></div><div class="profile-status"><span class="pill" id="emailVerifiedStatus">Email status</span><span class="pill">Identity: Not verified</span></div></div>
+      <div class="panel-body">
+        <div class="profile-status" style="margin-bottom:16px"><div class="profile-avatar" id="profileInitials">A</div><div><strong id="profileDisplayName">Your profile</strong><div class="subtext" id="profileDisplayEmail"></div></div></div>
+        <form id="accountProfileForm">
+          <div class="profile-grid">
+            <div class="field"><label for="profileFullName">Full name</label><input id="profileFullName" maxlength="120" autocomplete="name" placeholder="Your full name"></div>
+            <div class="field"><label for="profileMobile">Mobile number</label><input id="profileMobile" type="tel" maxlength="24" autocomplete="tel" placeholder="+91 98765 43210"></div>
+            <div class="field"><label for="profileCompany">Company / business</label><input id="profileCompany" maxlength="120" autocomplete="organization" placeholder="Your company"></div>
+            <div class="field"><label for="profileJobTitle">Job title</label><input id="profileJobTitle" maxlength="100" placeholder="Founder, Sales Manager, etc."></div>
+            <div class="field"><label for="profileCountry">Country</label><input id="profileCountry" maxlength="80" autocomplete="country-name" placeholder="Country"></div>
+            <div class="field"><label for="profileState">State</label><input id="profileState" maxlength="80" placeholder="State"></div>
+            <div class="field"><label for="profileCity">City</label><input id="profileCity" maxlength="80" autocomplete="address-level2" placeholder="City"></div>
+          </div>
+          <div class="hint">Mobile number is saved as unverified. SMS verification is not active yet. Government ID numbers and document images are not collected or stored.</div>
+          <div class="form-actions"><button class="btn primary" type="submit" id="saveProfileBtn">Save profile</button><span class="pill" id="mobileVerificationStatus">Mobile: Not verified</span></div>
+        </form>
+        <div class="message" id="profileMessage" role="status"></div>
+      </div>
+    </section>
+
     <div class="stats" aria-label="Sales summary">
       <div class="stat"><div class="label">Total leads</div><div class="value" id="totalLeads">0</div><div class="sub">All saved leads</div></div>
       <div class="stat"><div class="label">Open pipeline</div><div class="value" id="pipelineValue">₹0</div><div class="sub">New to qualified · totals by currency</div></div>
@@ -142,7 +180,7 @@ body{background:linear-gradient(180deg,#f5f7fc 0,#f7f9fd 260px,#f3f6fb 100%)}
       </div>
     </section>
   </section>
-  <div class="footer">AQERIVO TECHNOLOGIES · SALES TRACKER · Version 0.6</div>
+  <div class="footer">AQERIVO TECHNOLOGIES · SALES TRACKER · Version 0.7</div>
 </main>
 <div class="toast" id="toast" role="status"></div>
 <div class="modal-backdrop" id="profileModal"><div class="modal"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><h3 id="profileName">Customer profile</h3><button class="btn" id="closeProfileBtn">Close</button></div><div class="subtext" id="profileCompany"></div><div class="profile-meta" id="profileMeta"></div><h4 style="margin:12px 0 7px">Notes</h4><div class="profile-notes" id="profileNotes">No notes recorded.</div><div class="form-actions"><button class="btn primary" id="profileEditBtn">Edit customer</button></div></div></div>
@@ -176,10 +214,57 @@ function showSignedOut(){
   currentUser=null;leads=[];$('authPanel').classList.remove('hidden');$('appArea').classList.add('hidden');$('logoutBtn').classList.add('hidden');$('userLabel').classList.add('hidden');render();
 }
 function showSignedIn(user){
-  currentUser=user;$('authPanel').classList.add('hidden');$('appArea').classList.remove('hidden');$('logoutBtn').classList.remove('hidden');$('userLabel').classList.remove('hidden');$('userLabel').textContent=user.email||'Signed in';loadLeads();
+  currentUser=user;$('authPanel').classList.add('hidden');$('appArea').classList.remove('hidden');$('logoutBtn').classList.remove('hidden');$('userLabel').classList.remove('hidden');$('userLabel').textContent=user.email||'Signed in';loadAccountProfile();loadLeads();
 }
 function dbToLead(row){return {id:row.id,name:row.name||'',company:row.company||'',email:row.email||'',phone:row.phone||'',value:Number(row.deal_value)||0,currency:row.currency||'INR',status:row.status||'new',source:row.source||'',followup:row.next_follow_up||'',notes:row.notes||'',created_at:row.created_at};}
 function leadToDb(x){return {user_id:currentUser.id,name:x.name,company:x.company||null,email:x.email||null,phone:x.phone||null,deal_value:Number(x.value)||0,currency:x.currency||'INR',status:x.status||'new',source:x.source||null,next_follow_up:x.followup||null,notes:x.notes||null,updated_at:new Date().toISOString()};}
+
+function currentProfileMetadata(){
+  return currentUser?.user_metadata || {};
+}
+function loadAccountProfile(){
+  if(!currentUser)return;
+  const p=currentProfileMetadata();
+  $('profileFullName').value=p.full_name||'';
+  $('profileMobile').value=p.mobile_number||'';
+  $('profileCompany').value=p.company_name||'';
+  $('profileJobTitle').value=p.job_title||'';
+  $('profileCountry').value=p.country||'';
+  $('profileState').value=p.state||'';
+  $('profileCity').value=p.city||'';
+  const displayName=p.full_name||currentUser.email||'Your profile';
+  $('profileDisplayName').textContent=displayName;
+  $('profileDisplayEmail').textContent=currentUser.email||'';
+  $('profileInitials').textContent=(p.full_name||currentUser.email||'A').trim().charAt(0).toUpperCase();
+  $('emailVerifiedStatus').textContent=currentUser.email_confirmed_at?'Email: Verified':'Email: Pending';
+  $('mobileVerificationStatus').textContent='Mobile: Not verified';
+}
+async function saveAccountProfile(e){
+  e.preventDefault();
+  if(!currentUser)return;
+  const btn=$('saveProfileBtn');btn.disabled=true;clearMessage('profileMessage');
+  const metadata={
+    ...currentProfileMetadata(),
+    full_name:$('profileFullName').value.trim(),
+    mobile_number:$('profileMobile').value.trim(),
+    mobile_verified:false,
+    company_name:$('profileCompany').value.trim(),
+    job_title:$('profileJobTitle').value.trim(),
+    country:$('profileCountry').value.trim(),
+    state:$('profileState').value.trim(),
+    city:$('profileCity').value.trim()
+  };
+  try{
+    const {data,error}=await supabaseClient.auth.updateUser({data:metadata});
+    if(error)throw error;
+    currentUser=data.user||currentUser;
+    loadAccountProfile();
+    message('profileMessage','Profile saved successfully. Your mobile number is still unverified.','success');
+  }catch(err){
+    message('profileMessage','Could not save profile: '+(err.message||'Please try again.'),'error');
+  }finally{btn.disabled=false;}
+}
+
 function render(){
   const open=leads.filter(x=>!['won','lost'].includes(x.status));
   const won=leads.filter(x=>x.status==='won');
@@ -335,19 +420,76 @@ async function restoreFile(file){
   }catch(err){toast('Import failed: '+err.message);}
   finally{$('restoreFile').value='';}
 }
+function friendlyAuthError(err,kind){
+  const raw=String(err?.message||'').toLowerCase();
+  if(raw.includes('invalid login credentials')||raw.includes('invalid_credentials'))return 'Email or password is incorrect. Check both details and try again.';
+  if(raw.includes('email not confirmed'))return 'Please confirm your email address before signing in. You can request a new confirmation email if needed.';
+  if(raw.includes('too many requests')||raw.includes('rate limit'))return 'Too many attempts. Please wait a few minutes and try again.';
+  if(raw.includes('user already registered'))return 'An account may already exist for this email. Please sign in or use Forgot password.';
+  if(raw.includes('password'))return 'Password does not meet the security requirements. Use at least 8 characters.';
+  if(raw.includes('fetch'))return 'Could not connect to AQERIVO. Check your internet connection and try again.';
+  return kind==='login'?'Sign-in failed. Check your details and try again.':(err?.message||'Authentication failed. Please try again.');
+}
 async function authAction(kind){
   clearMessage('authMessage');
   const email=$('authEmail').value.trim(),password=$('authPassword').value;
-  if(!email||password.length<8){message('authMessage','Enter a valid email and a password with at least 8 characters.','error');return;}
+  if(!email||!$('authEmail').checkValidity()){message('authMessage','Enter a valid email address.','error');return;}
+  if(password.length<8){message('authMessage','Password must contain at least 8 characters.','error');return;}
   const btn=kind==='login'?'loginBtn':'signupBtn';$(btn).disabled=true;
   try{
     const result=kind==='login'?await supabaseClient.auth.signInWithPassword({email,password}):await supabaseClient.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}});
     if(result.error)throw result.error;
-    if(kind==='signup'&&!result.data.session){message('authMessage','Account created. Check your email and confirm your address, then sign in.','success');}
-    else if(result.data.user){message('authMessage','Signed in successfully.','success');showSignedIn(result.data.user);}
-  }catch(err){message('authMessage',err.message||'Authentication failed.','error');}
+    if(kind==='signup'){
+      const user=result.data.user;
+      if(user && Array.isArray(user.identities) && user.identities.length===0){
+        message('authMessage','An account may already exist for this email. Please sign in or use Forgot password.','error');
+      }else if(result.data.session && user){
+        message('authMessage','Account created and signed in successfully.','success');showSignedIn(user);
+      }else{
+        message('authMessage','If this email can be registered, a confirmation message has been sent. Check your inbox.','success');
+      }
+    }else if(result.data.user){
+      message('authMessage','Signed in successfully.','success');showSignedIn(result.data.user);
+    }
+  }catch(err){message('authMessage',friendlyAuthError(err,kind),'error');}
   finally{$(btn).disabled=false;}
 }
+async function sendPasswordOtp(){
+  clearMessage('resetMessage');
+  const email=$('resetEmail').value.trim();
+  if(!email||!$('resetEmail').checkValidity()){message('resetMessage','Enter a valid email address.','error');return;}
+  const btn=$('sendResetOtpBtn');btn.disabled=true;
+  try{
+    const {error}=await supabaseClient.auth.resetPasswordForEmail(email);
+    if(error)throw error;
+    message('resetMessage','If an account exists for this email, a recovery email has been sent. Check your inbox and spam folder for the one-time code.','success');
+  }catch(err){message('resetMessage',friendlyAuthError(err,'reset'),'error');}
+  finally{btn.disabled=false;}
+}
+async function verifyOtpAndResetPassword(){
+  clearMessage('resetMessage');
+  const email=$('resetEmail').value.trim(),token=$('resetOtp').value.trim();
+  const password=$('newPassword').value,confirmPassword=$('confirmNewPassword').value;
+  if(!email||!$('resetEmail').checkValidity()){message('resetMessage','Enter the email address used for the recovery request.','error');return;}
+  if(!token){message('resetMessage','Enter the one-time recovery code from your email.','error');return;}
+  if(password.length<8){message('resetMessage','New password must contain at least 8 characters.','error');return;}
+  if(password!==confirmPassword){message('resetMessage','The new passwords do not match.','error');return;}
+  const btn=$('verifyResetOtpBtn');btn.disabled=true;
+  try{
+    const {data,error}=await supabaseClient.auth.verifyOtp({email,token,type:'recovery'});
+    if(error)throw error;
+    if(!data?.user)throw new Error('The recovery code could not be verified. Request a new code and try again.');
+    const {error:updateError}=await supabaseClient.auth.updateUser({password});
+    if(updateError)throw updateError;
+    message('resetMessage','Password changed successfully. You can now sign in with your new password.','success');
+    $('authEmail').value=email;$('authPassword').value='';$('resetOtp').value='';$('newPassword').value='';$('confirmNewPassword').value='';
+  }catch(err){
+    const raw=String(err?.message||'').toLowerCase();
+    const msg=(raw.includes('token')||raw.includes('otp')||raw.includes('expired'))?'The recovery code is invalid or expired. Request a new code and try again.':friendlyAuthError(err,'reset');
+    message('resetMessage',msg,'error');
+  }finally{btn.disabled=false;}
+}
+
 async function init(){
   if(!window.supabase||!window.supabase.createClient){message('authMessage','Supabase library did not load. Check your internet connection and refresh.','error');return;}
   if(!SUPABASE_URL.startsWith('https://')||!SUPABASE_PUBLISHABLE_KEY.startsWith('sb_publishable_')){
@@ -356,7 +498,12 @@ async function init(){
   supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
   $('loginBtn').addEventListener('click',()=>authAction('login'));
   $('signupBtn').addEventListener('click',()=>authAction('signup'));
+  $('forgotPasswordBtn').addEventListener('click',()=>{$('passwordResetPanel').classList.remove('hidden');$('resetEmail').value=$('authEmail').value.trim();clearMessage('resetMessage');});
+  $('cancelResetBtn').addEventListener('click',()=>{$('passwordResetPanel').classList.add('hidden');clearMessage('resetMessage');});
+  $('sendResetOtpBtn').addEventListener('click',sendPasswordOtp);
+  $('verifyResetOtpBtn').addEventListener('click',verifyOtpAndResetPassword);
   $('logoutBtn').addEventListener('click',async()=>{const {error}=await supabaseClient.auth.signOut();if(error)toast(error.message);else showSignedOut();});
+  $('accountProfileForm').addEventListener('submit',saveAccountProfile);
   $('leadForm').addEventListener('submit',saveLead);$('cancelEditBtn').addEventListener('click',resetForm);
   ['search','filterStatus','sortBy'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',render));
   $('leadRows').addEventListener('click',e=>{
@@ -387,4 +534,4 @@ init();
 })();
 </script>
 </body>
-</html>
+</html>>
